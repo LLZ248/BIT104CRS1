@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.function.*;
 import java.time.format.*;
-import org.apache.commons.collections4.map.MultiValueMap;
+import java.util.ArrayList;
 
 
 public class test1  {
@@ -84,15 +84,34 @@ public class test1  {
         System.out.println(date);
         System.out.println(text);
         System.out.println(parsedDate);
-        MultiValueMap<String,String> ht1 = new MultiValueMap<>();
-        ht1.put("1", "1212121");
-        ht1.put("1", "abc123");
-        System.out.println(String.join("\n", hash_table.values()));
-        ht1.getCollection("1").forEach(p->System.out.println(p));
+        System.out.println("Hashtable test\n");
+        Hashtable<String,List<String>> ht1 = new Hashtable<>();
+        addKAndListVintoHashtable(ht1,"1","abc123456789");
+        addKAndListVintoHashtable(ht1,"2","abc1234");
+        ht1.get("1").add("abc123");
+        System.out.println(ht1.get("1").size());
+        ht1.values().forEach(v->v.forEach(p->System.out.println(p)));
+        
         
 
-
     }
+    /**
+     * 
+     * @param ht
+     * @param k
+     * @param v 
+     */
+    public static void addKAndListVintoHashtable(
+        Hashtable<String,List<String>> ht, String k, String v){
+        if(ht.contains(k)){
+            ht.get(k).add(v);
+        }else{
+            List<String> list = new ArrayList<>();
+            list.add(v);
+            ht.put(k, list);
+        }
+    }
+
 }
 
 

@@ -8,8 +8,8 @@ import java.util.Scanner;
 import java.util.stream.*;
 import java.util.Arrays;
 import java.time.format.*;
-import org.apache.commons.collections4.map.MultiValueMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -26,8 +26,8 @@ public class CRSConsole {
     //Hash table to store Trip objects 
     static Hashtable<String,Trip> CRSTrips = new Hashtable<>();
     //Hash table to record assigned trips by which staff
-    static MultiValueMap<String,String> CRSAssignedTrips 
-            = new MultiValueMap<String,String>();
+    static Hashtable<String,List<String>> CRSAssignedTrips 
+            = new Hashtable<>();
     
     //valid userType in the system
     enum UserType{
@@ -207,8 +207,8 @@ public class CRSConsole {
                 + "[Y]es/[N]o : ");
         if(Character.toLowerCase(sc.next().charAt(0))=='y'){
             CRSTrips.put(dummyTrip.getTripID(), dummyTrip);
-            CRSAssignedTrips.put(currentUser.getUsername()
-                    , dummyTrip.getTripID());
+            addKAndListVintoHashtable(CRSAssignedTrips,
+                    currentUser.getUsername(),dummyTrip.getTripID());
             System.out.println("Trip created...");
         } 
         else
@@ -217,8 +217,8 @@ public class CRSConsole {
     
     public static void manageApplication(){
         if(CRSAssignedTrips.containsKey(currentUser.getUsername())){
-            Iterator it = CRSAssignedTrips.iterator(
-                    currentUser.getUsername());
+            Iterator it = CRSAssignedTrips.get(currentUser.getUsername())
+                    .iterator();
             while(it.hasNext()){
                 System.out.println(String.join("\n", 
                         CRSTrips.get(it.next()).toString()));
@@ -226,8 +226,8 @@ public class CRSConsole {
             Trip theTrip = null;String tripID=null;
             boolean valid = false;
             while(!valid){
-                it = CRSAssignedTrips.iterator(
-                    currentUser.getUsername());
+                it = CRSAssignedTrips.get(currentUser.getUsername())
+                        .iterator();
                 System.out.print("Enter the Application ID that you "
                     + "wished to process: ");
                 String appID = sc.next().toUpperCase();
@@ -654,5 +654,20 @@ public class CRSConsole {
         System.out.println("Logged Out...");
     }
     
-    
+    /**
+     * 
+     * @param ht
+     * @param k
+     * @param v 
+     */
+    public static void addKAndListVintoHashtable(
+        Hashtable<String,List<String>> ht, String k, String v){
+        if(ht.contains(k)){
+            ht.get(k).add(v);
+        }else{
+            List<String> list = new ArrayList<>();
+            list.add(v);
+            ht.put(k, list);
+        }
+    }
 }
