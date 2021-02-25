@@ -138,6 +138,8 @@ public class CRSConsole {
                 organizeTrip();return true;
             case '2':
                 manageApplication();return true;
+            case '3':
+               viewApplication();return true;
             case 'q':case'Q':
                 quit();
                 return false;
@@ -213,6 +215,38 @@ public class CRSConsole {
         } 
         else
             System.out.println("Cancelled...");
+    }
+    
+    public static void viewApplication(){
+        if(CRSAssignedTrips.containsKey(currentUser.getUsername())){
+            Iterator it = CRSAssignedTrips.get(currentUser.getUsername())
+                    .iterator();
+            boolean isThereAnyApplication = false;
+            //display all the relevant trips and the trip's applications
+            while(it.hasNext()){
+                Trip theTrip = CRSTrips.get(it.next());
+                String applicationResult = theTrip.getApplicationDetails()
+                        .stream().map(Object::toString)
+                        .collect(Collectors.joining("\n"));
+                if(applicationResult.isBlank()){
+                    applicationResult = "No applications yet";
+                }else{
+                    isThereAnyApplication = true;
+                }
+                System.out.println("Trip: \n"+theTrip+"\nThe Trip "
+                        +theTrip.getTripID()+" Applications: \n"
+                        +applicationResult);
+            }
+            if(isThereAnyApplication){
+                
+            }else{
+                System.out.println("-----------------------------------");
+                System.out.println("\nNo application is submmited yet.");
+            }
+
+        }else{
+            System.out.println("You have not created any trip yet");
+        }
     }
     
     public static void manageApplication(){
