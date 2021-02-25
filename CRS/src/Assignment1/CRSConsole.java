@@ -98,6 +98,7 @@ public class CRSConsole {
             case STAFF:
                 System.out.println("[1]Organize Trip");
                 System.out.println("[2]Manage Applications");
+                System.out.println("[3]View Applications");
                 System.out.println("[Q/q]sign out [BACK TO MAIN PAGE]");
                 System.out.print("Your choice : ");
                 return handleStaffMenu(sc.next().charAt(0));
@@ -443,9 +444,20 @@ public class CRSConsole {
             System.out.print("Enter the Trip ID : ");
             String tripID = sc.next().toUpperCase();
             if(CRSTrips.containsKey(tripID)){
-                CRSTrips.get(tripID).addNewApplication(
-                        currentUser.getUsername());
-                System.out.println("Application submitted successfully.");
+                switch(CRSTrips.get(tripID)
+                        .addNewApplication(currentUser.getUsername())){
+                    case 0:
+                        System.out.println("Application submitted "
+                                + "successfully.");break;
+                    case 1:
+                        System.out.println("The Trip is already full!");break;
+                    case 2:
+                        System.out.println("You have already applied for "
+                                + "this trip!");break;
+                    default:
+                        break;
+                }
+                
             }else{
                 System.out.println("Trip with the TripID is not"
                         + " found.");
@@ -453,7 +465,14 @@ public class CRSConsole {
         }
     }
     public static void viewApplicationStatus(){
-        
+        String result = CRSTrips.values().stream().map(t->t.
+                getApplicationDetails(currentUser.getUsername())).
+                collect(Collectors.joining("\n"));
+        if(result.isBlank()){
+            System.out.println(result);
+        }else{
+            System.out.println("You have not applied for any trip yet.");
+        }
     }
     
     public static String[] login(){

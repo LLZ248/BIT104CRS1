@@ -208,7 +208,7 @@ public class Trip {
             return getApplicationHashTable().values().stream().findFirst()
                     .filter(app->app.getVolunteerID()
                     .equalsIgnoreCase(theVolunteerID))
-                    .map(Object::toString).get();    
+                    .map(Object::toString).orElse("");    
         }
 
         public Hashtable<String, Application> getApplicationHashTable() {
