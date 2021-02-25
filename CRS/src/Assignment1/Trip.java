@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.stream.*;
 import java.util.List;
 
@@ -180,37 +181,58 @@ public class Trip {
             }
         }
 
-        public List<Application> getApplication() {
+        public List<Application> getApplicationDetails() {
             return getApplicationHashTable().values().stream()
                     .collect(Collectors.toList());
         }
         
-        public String getApplication(String username) {
+        public boolean isRepeatedVolunteer(String theVolunteerID){
+            if (getApplicationHashTable().values().stream().
+                    anyMatch(app->app.getVolunteerID().
+                            equalsIgnoreCase(theVolunteerID))){
+                return true;
+            }
+            return false;
+        }
+        
+        public boolean isApplicationHashTableFull(){
+            if(getApplicationHashTable().values().stream().
+                    filter(app->app.getStatus().equalsIgnoreCase("ACCEPTED"))
+                    .count() < getNumVolunteers()){
+                return false;
+            }
+            return true;
+        }
+        
+        public String getApplicationDetails(String theVolunteerID) {
             return getApplicationHashTable().values().stream().findFirst()
-                    .filter(app->app.getVolunteer().getUsername()
-                    .equalsIgnoreCase(username)).map(Object::toString).get();    
+                    .filter(app->app.getVolunteerID()
+                    .equalsIgnoreCase(theVolunteerID))
+                    .map(Object::toString).get();    
         }
 
         public Hashtable<String, Application> getApplicationHashTable() {
             return applicationHashTable;
         }
         
-        
-        //adding application into the applicationArr
         /**
-         * 
+         * adding application into the applicationHashTable
          * @param theVolunteer
-         * @return 
+         * @return error
+         * 0. no error
+         * 1. the table is already full
+         * 2. Duplicate Volunteer
          */
-        public int addNewApplication(Volunteer theVolunteer){
-            if(applicationHashTable.size()<getNumVolunteers()){
-                Application anApplication = new Application(theVolunteer);
-                getApplicationHashTable().put(
-                        anApplication.getApplicationID()
-                        ,anApplication);
-                return 0;
+        public int addNewApplication(String theVolunteerID){
+            if(!isApplicationHashTableFull()){
+                if(!isRepeatedVolunteer(theVolunteerID)){
+                    Application app =  new Application(theVolunteerID);
+                    getApplicationHashTable().put(app.getApplicationID(), app);
+                    return 0;
+                }else{return 2;}
+            }else{
+                return 1;
             }
-            return 1;
         }
         
         /**
@@ -218,13 +240,51 @@ public class Trip {
          * @param theApplicationID
          * @param theApplicationStatus
          * @return 
+         * if the application hashtable is already full after approving an 
+         * application, other applications in the hashtable will be set as
+         * rejected
          */
         public boolean changeApplicationStatusByApplicationID(
                 String theApplicationID, char theApplicationStatus){
-            if(getApplicationHashTable().contains(theApplicationID)){
-                getApplicationHashTable().get(theApplicationID)
-                    .setStatus(theApplicationStatus);
-                return true;
+            theApplicationStatus = Character.toUpperCase(theApplicationStatus);
+            if(getApplicationHashTable().containsKey(theApplicationID)){
+                Application theApp = getApplicationHashTable()
+                        .get(theApplicationID);
+                if(theApp.getStatus().equalsIgnoreCase("ACCEPTED")
+                        ||theApp.getStatus().equalsIgnoreCase("REJECTED"))
+                    return false;
+                else{
+                    if(theApplicationStatus == 'A'){
+                        //accepted
+                        if(!isApplicationHashTableFull()){
+                            if(theApp.setStatus(theApplicationStatus)==0){
+                                if(isApplicationHashTableFull()){
+                                    Iterator it = getApplicationHashTable()
+                                            .values().iterator();
+                                    while(it.hasNext()){
+                                        Application app = (Application)it
+                                                .next();
+                                        if(app.getStatus().equals("NEW")){
+                                            app.setStatus('R');
+                                        }
+                                    }
+                                }
+                                return true;
+                            }else{
+                                return false;//invalid type
+                            }
+                        }else{
+                            return false;
+                        }
+                    }
+                    //rejected
+                    if(theApp.setStatus(theApplicationStatus)==0){
+                        return true;
+                    }else{
+                        return false;//invalid type
+                    }
+                }
+                
             }else
                 return false;   
         }

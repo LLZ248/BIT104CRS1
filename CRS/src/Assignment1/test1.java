@@ -27,8 +27,8 @@ public class test1  {
             //Stream<Integer> streamIterated = Stream.iterate(40, n -> n).limit(20);
             //System.out.println(streamIterated.allMatch(element->element.equals(20)));
             //System.out.println(streamIterated.filter(element->element.equals(40)).collect(Collectors.toList()));
-            Volunteer v2 = new Volunteer(null,null,null,null);
-            Application a1 = new Application(v2);
+
+            Application a1 = new Application(null);
             System.out.println(a1);
 
            System.out.println(System.getProperty("user.dir"));
@@ -103,7 +103,7 @@ public class test1  {
      */
     public static void addKAndListVintoHashtable(
         Hashtable<String,List<String>> ht, String k, String v){
-        if(ht.contains(k)){
+        if(ht.containsKey(k)){
             ht.get(k).add(v);
         }else{
             List<String> list = new ArrayList<>();

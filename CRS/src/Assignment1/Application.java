@@ -15,7 +15,7 @@ public class Application {
     private String applicationID,remarks;
     private LocalDate applicationDate;
     private Status status;
-    private Volunteer volunteer;
+    private String volunteerID;
     
     
     enum Status{
@@ -26,9 +26,9 @@ public class Application {
      * 
      * @param volunteer 
      */
-    public Application(Volunteer volunteer) {
+    public Application(String volunteerID) {
         setApplicationID();
-        setVolunteer(volunteer);
+        setVolunteerID(volunteerID);
         setApplicationDate(LocalDate.now());
         setStatus('N');
         setRemarks("No remark yet");
@@ -45,18 +45,13 @@ public class Application {
         Application.applicationIDCount++;
     }
 
-    public Volunteer getVolunteer() {
-        return volunteer;
+    public String getVolunteerID() {
+        return volunteerID;
     }
 
-    /**
-     * 
-     * @param volunteer 
-     */
-    public void setVolunteer(Volunteer volunteer) {
-        this.volunteer = volunteer;
+    public void setVolunteerID(String volunteerID) {
+        this.volunteerID = volunteerID;
     }
-
 
     public String getApplicationDate() {
         return Optional.ofNullable(""+applicationDate)
@@ -80,24 +75,27 @@ public class Application {
      * 
      * @param statusChar
      * @return 
+     * 0. no error
+     * 1. invalid status 
+     * 
      */
     public int setStatus(char statusChar) {
-        
+        statusChar = Character.toUpperCase(statusChar); 
         switch (statusChar){
                 //error code 0 indicates no error
-                case 'N':case'n':
+                case 'N':
                     this.status = Status.NEW;
                     return 0;
-                case 'A':case'a':
+                case 'A':
                     this.status = Status.ACCEPTED;
                     return 0;
-                case 'R':case'r':
+                case 'R':
                     this.status = Status.REJECTED;
                     return 0;
                 default:
                     //if other char, return error code 1
                     return 1;
-            }
+        }
     }
 
     public String getRemarks() {
@@ -114,6 +112,7 @@ public class Application {
         return  "\napplicationID      : " + getApplicationID() + 
                 "\napplicationDate    : " + getApplicationDate() + 
                 "\nstatus             : " + getStatus() + 
+                "\nVolunteer Username : " + getVolunteerID()+
                 "\nremarks            : " + getRemarks();
     }
     

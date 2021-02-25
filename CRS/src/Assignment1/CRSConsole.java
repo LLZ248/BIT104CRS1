@@ -219,45 +219,70 @@ public class CRSConsole {
         if(CRSAssignedTrips.containsKey(currentUser.getUsername())){
             Iterator it = CRSAssignedTrips.get(currentUser.getUsername())
                     .iterator();
+            boolean isThereAnyApplication = false;
+            //display all the relevant trips and the trip's applications
             while(it.hasNext()){
-                System.out.println(String.join("\n", 
-                        CRSTrips.get(it.next()).toString()));
-            }
-            Trip theTrip = null;String tripID=null;
-            boolean valid = false;
-            while(!valid){
-                it = CRSAssignedTrips.get(currentUser.getUsername())
-                        .iterator();
-                System.out.print("Enter the Application ID that you "
-                    + "wished to process: ");
-                String appID = sc.next().toUpperCase();
-                while(it.hasNext()){
-                    tripID = it.next().toString();
-                    if (CRSTrips.get(tripID).getApplication().stream()
-                            .anyMatch(app -> app.getApplicationID()
-                                    .equals(appID)))
-                        valid=true;break;
-                }
-                if(valid){
-                    theTrip = CRSTrips.get(tripID);
+                Trip theTrip = CRSTrips.get(it.next());
+                String applicationResult = theTrip.getApplicationDetails()
+                        .stream().map(Object::toString)
+                        .collect(Collectors.joining("\n"));
+                if(applicationResult.isBlank()){
+                    applicationResult = "No applications yet";
                 }else{
-                    System.out.println(
-                            "Invalid Application ID!Possible reasons are:"
-                            + "\n1.You are not responsible for this trip."+
-                            "\n2.Not exisitng application ID.");
+                    isThereAnyApplication = true;
                 }
+                System.out.println("Trip: \n"+theTrip+"\nThe Trip "
+                        +theTrip.getTripID()+" Applications: \n"
+                        +applicationResult);
             }
-            char choice;
-            while(true){
-                System.out.print("[A]ccept or [R]eject ? ");
-                choice = Character.toUpperCase(sc.next().charAt(0));
-                if (choice == 'A'||choice =='R')break;
-                System.out.println("Invalid choice!!");
+            if(isThereAnyApplication){
+                Trip theTrip = null;String tripID=null;String appID=null;
+                boolean valid = false;
+                while(!valid){
+                    it = CRSAssignedTrips.get(currentUser.getUsername())
+                            .iterator();
+                    System.out.print("Enter the Application ID that you "
+                        + "wished to process: ");
+                    appID = sc.next().toUpperCase();
+                    while(it.hasNext()){
+                        tripID = it.next().toString();
+                        String theAppID = appID;
+                        if (CRSTrips.get(tripID).getApplicationDetails()
+                                .stream()
+                                .anyMatch(app -> app.getApplicationID()
+                                        .equals(theAppID)))
+                            valid=true;break;
+                    }
+                    if(valid){
+                        theTrip = CRSTrips.get(tripID);
+                    }else{
+                        System.out.println(
+                                "Invalid Application ID!Possible reasons are:"+ 
+                                "\n1.You are not responsible for this trip."+
+                                "\n2.Not exisitng application ID.");
+                    }
+                }
+                char choice;
+                while(true){
+                    System.out.print("[A]ccept or [R]eject ? ");
+                    choice = Character.toUpperCase(sc.next().charAt(0));
+                    if (choice == 'A'||choice =='R')break;
+                    System.out.println("Invalid choice!!");
+                }
+
+                if(theTrip.changeApplicationStatusByApplicationID(appID,
+                        choice)){
+                    System.out.println("Application status changed"
+                            + " successfully.");
+                }else{
+                    System.out.println("This application has already been "
+                            + "processed before!");
+                }
+            }else{
+                System.out.println("-----------------------------------");
+                System.out.println("\nNo application is submmited yet.");
             }
-            
-            theTrip.changeApplicationStatusByApplicationID(tripID, choice);
-            System.out.println("Application status changed successfully.");
-            
+
         }else{
             System.out.println("You have not created any trip yet");
         }
@@ -384,8 +409,8 @@ public class CRSConsole {
             System.out.print("Enter the Trip ID : ");
             String tripID = sc.next().toUpperCase();
             if(CRSTrips.containsKey(tripID)){
-                CRSTrips.get(tripID).addNewApplication((Volunteer)
-                        currentUser);
+                CRSTrips.get(tripID).addNewApplication(
+                        currentUser.getUsername());
                 System.out.println("Application submitted successfully.");
             }else{
                 System.out.println("Trip with the TripID is not"
@@ -662,7 +687,7 @@ public class CRSConsole {
      */
     public static void addKAndListVintoHashtable(
         Hashtable<String,List<String>> ht, String k, String v){
-        if(ht.contains(k)){
+        if(ht.containsKey(k)){
             ht.get(k).add(v);
         }else{
             List<String> list = new ArrayList<>();
