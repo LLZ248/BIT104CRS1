@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Assignment1;
 import java.util.Optional;
 import java.time.LocalDate;
@@ -24,7 +19,8 @@ public class Application {
     
     /**
      * 
-     * @param volunteer 
+     * @param volunteerID 
+     * A volunteer username that indicates the volunteer of the application
      */
     public Application(String volunteerID) {
         setApplicationID();
@@ -33,26 +29,48 @@ public class Application {
         setStatus('N');
         setRemarks("No remark yet");
     }
-
+    /**
+     * 
+     * @return 
+     * return application ID of the object
+     */
     public String getApplicationID() {
         return Optional.ofNullable(applicationID)
                 .orElseGet(()->"No ApplicationID") ;
     }
-
+    /**
+     * generate and set applciationID for the object, also
+     * increase the applicationIDCount by 1
+     */
     public void setApplicationID() {
         this.applicationID = String.format("AP%05d",
                 Application.applicationIDCount);
         Application.applicationIDCount++;
     }
-
+    /**
+     * 
+     * @return volunteerID
+     * get the volunteerID that attached to this object
+     */
     public String getVolunteerID() {
         return volunteerID;
     }
 
+    /**
+     * 
+     * @param volunteerID 
+     * set the volunteer for this object
+     */
     public void setVolunteerID(String volunteerID) {
         this.volunteerID = volunteerID;
     }
 
+    /**
+     * 
+     * @return 
+     * return the applicationDate in string, return "No ApplicationDate" 
+     * if null
+     */
     public String getApplicationDate() {
         return Optional.ofNullable(""+applicationDate)
                 .orElseGet(()->"No ApplicationDate") ;
@@ -61,19 +79,26 @@ public class Application {
     /**
      * 
      * @param applicationDate 
+     * setter for applicationDate
      */
     public void setApplicationDate(LocalDate applicationDate) {
         this.applicationDate = applicationDate;
     }
-
+    
+    /**
+     * 
+     * @return 
+     * getter for status, return "No Status" if null
+     */
     public String getStatus() {
         return Optional.ofNullable(""+status)
                 .orElseGet(()->"No Status") ;
     }
 
     /**
-     * 
+     * setter for status
      * @param statusChar
+     * a char indicates the status, valid status are 'N','A','R'
      * @return 
      * 0. no error
      * 1. invalid status 
@@ -97,17 +122,28 @@ public class Application {
                     return 1;
         }
     }
-
+    /**
+     * 
+     * @return 
+     * getter for remarks, return "No Remarks" if null
+     */
     public String getRemarks() {
         return Optional.ofNullable(remarks)
                 .orElseGet(()->"No Remarks") ;
     }
-
+    /**
+     * setter for remarks
+     * @param remarks 
+     * A String represents the remarks
+     */
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
     @Override
+    /**
+     * print out the application details
+     */
     public String toString() {
         return  "\napplicationID      : " + getApplicationID() + 
                 "\napplicationDate    : " + getApplicationDate() + 

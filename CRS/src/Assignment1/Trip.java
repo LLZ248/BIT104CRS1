@@ -2,7 +2,6 @@ package Assignment1;
 
 import java.util.Optional;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.stream.*;
