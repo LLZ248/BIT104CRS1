@@ -1,10 +1,9 @@
 package Assignment1;
 
+import static Assignment1.CRSConsole.stringToLocalDate;
 import java.util.*;
 import java.util.stream.*;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.function.*;
 import java.time.format.*;
 import java.util.ArrayList;
 
@@ -95,7 +94,17 @@ public class test1  {
         System.out.println(ht1.get("1").size());
         ht1.values().forEach(v->v.forEach(p->System.out.println(p)));
         
-        
+        Hashtable<String,User> CRSUsers = new Hashtable<>();
+        CRSUsers.put("LLZ248",new Volunteer("llz248","abc123","Lee Lin Zheng"
+                ,"0164487232"));
+        CRSUsers.put("LLZ2248",new Staff("Senior",
+                stringToLocalDate("12/02/2020")
+                ,"LLZ248","abc123","Lee Lin Zheng","0164487232"));
+        String result = CRSUsers.values().stream().filter(u->u instanceof Staff)
+                .map(u->(Staff)u)
+                .map(Object::toString).collect(Collectors.joining("\n"));
+        result = result.isBlank()?"No staff is recorded.":result;
+        System.out.println(result);
 
     }
     /**

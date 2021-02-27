@@ -156,23 +156,43 @@ public class CRSConsole {
                 
             case MANAGER:
                 System.out.println("[1]Record New Staff");
+                System.out.println("[2]View All Trips");
+                System.out.println("[3]View All Staff");
+                System.out.println("[4]View All Volunteer");
                 System.out.println("[Q/q]sign out [BACK TO MAIN PAGE]");
                 System.out.print("Your choice : ");
-                
-                switch(sc.next().charAt(0)){
-                    case '1':
-                        recordCRSStaff();
-                        return true;
-                    case 'Q':case'q':
-                        quit();
-                        return false;
-                    default:
-                        System.out.println("Invalid choice!");
-                        return true;
-                }
+                return handleAdminMenu(sc.next().charAt(0));
                 
         }
         return false;
+    }
+    /**
+     * This method will handle the methods for Manager
+     * @param choice char represent user choice
+     * @return a boolean object represent quit or not
+     */
+    public static boolean handleAdminMenu(char choice){
+        switch(choice){
+            case '1':
+                recordCRSStaff();
+                return true;
+            case '2':
+                System.out.println(viewTrips());
+                return true;
+            case '3':
+                System.out.println(viewStaffs());
+                return true;
+            case '4':
+                System.out.println(viewVolunteers());
+                return true;
+            case 'Q':case'q':
+                quit();
+                return false;
+            default:
+                System.out.println("Invalid choice!");
+                return true;
+        
+        }
     }
     
     /**
@@ -587,7 +607,7 @@ public class CRSConsole {
         int errorCode = 
         user.isEmpty()?1:(user.get().getPassword().equals(uInfo[1])?0:2);
         //Specific login verify for CRS admin
-        errorCode = (uInfo[0].equals(MANAGAERUNAME) && 
+        errorCode = (uInfo[0].equalsIgnoreCase(MANAGAERUNAME) && 
                 uInfo[1].equals(MANAGAERPASSWORD))?-99:errorCode;
         return errorCode;
     }
@@ -699,7 +719,7 @@ public class CRSConsole {
      * is given.
      * @return staffDate
      */
-    public static String askFprStaffDate(){
+    public static String askForStaffDate(){
         String staffDate = "";
         boolean valid = false;
         while(!valid){
@@ -759,7 +779,7 @@ public class CRSConsole {
         staffPhone=askForPhoneNum("Enter the staff phone : ");
         staffPosition = askForNonNullStringInput("Enter the staff "
                 + "position : ","Invalid position:null position!");
-         String staffDate = askFprStaffDate();
+         String staffDate = askForStaffDate();
         Staff dummy = new Staff(staffPosition, 
                 stringToLocalDate(staffDate),
                 staffUsername,staffPassword,
@@ -778,6 +798,56 @@ public class CRSConsole {
         
     }
     
+    /**
+     * Admin method to view all the trips and its applications
+     * @return result in String 
+     */
+    public static String viewTrips(){
+        String result = null;
+        if(CRSTrips.isEmpty()){
+            result = "No trip is created yet.";
+        }else{
+            Iterator it = CRSTrips.values().iterator();
+            while(it.hasNext()){
+                Trip trip = (Trip)it.next();
+                result = result + trip.toString();
+                String result2 = trip.getApplicationDetails().stream()
+                        .map(Object::toString).
+                        collect(Collectors.joining("\n"));
+                result2 = result2.isBlank()?"\nNo application for "
+                        + "this trip yet.":result2;
+                result = result +result2+
+                        "----------------------------------\n";
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Admin method to view all recorded Staff 
+     * @return result in String
+     */
+    public static String viewStaffs(){
+        String result = null;
+        result = CRSUsers.values().stream().filter(u->u instanceof Staff)
+                .map(u->(Staff)u)
+                .map(Object::toString).collect(Collectors.joining("\n"));
+        result = result.isBlank()?"No staff is recorded.":result;
+        return result;
+    }
+    
+    /**
+     * Admin method to view all recorded Volunteer 
+     * @return result in String
+     */
+    public static String viewVolunteers(){
+        String result = null;
+        result = CRSUsers.values().stream().filter(u->u instanceof Volunteer)
+                .map(u->(Volunteer)u)
+                .map(Object::toString).collect(Collectors.joining("\n"));
+        result = result.isBlank()?"No volunteer is recorded.":result;
+        return result;
+    }
     /**
      * Method to check username, return true if valid, false if invalid
      * @param uName String
