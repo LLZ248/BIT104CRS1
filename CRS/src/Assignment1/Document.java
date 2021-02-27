@@ -7,6 +7,7 @@ import java.util.Optional;
  */
 public class Document {
     
+    
     enum DocumentType {
         PASSPORT,
         CERTIFICATE,
@@ -20,8 +21,11 @@ public class Document {
     /**
      * 
      * @param documentType
+     * A String object represents the type of the document
      * @param expiryDate
+     * A LocalDate object represents the expiry date of the document
      * @param image 
+     * A String object represents the image file
      */
     public Document(char documentType, LocalDate expiryDate, String image) {
         setDocumentType(documentType);
@@ -31,22 +35,24 @@ public class Document {
     /**
      * 
      * @param documentType
+     * A String object represents the type of the document
      * @param image 
+     * A String object represents the image file
      */
     public Document(char documentType, String image) {
         setDocumentType(documentType);
         setImage(image);
     }
     /**
-     * 
-     * @return 
+     * getter for documentType
+     * @return documentType
      */
     public DocumentType getDocumentType() {
         return documentType;
     }
     /**
-     * 
-     * @param documentType 
+     * setter for 
+     * @param documentType documentType
      */
     public void setDocumentType(char documentType) {
         switch (documentType){
@@ -64,28 +70,33 @@ public class Document {
     /**
      * 
      * @return 
+     * return the expiry date of the document in string,
+     * return "No Expiry Date" if null
      */
     public String getExpiryDate() {
         return Optional.ofNullable(""+expiryDate)
                 .orElseGet(()->"No Expiry Date") ;
     }
     /**
-     * 
+     * setter for expiryDate
      * @param expiryDate 
+     * A LocalDate object is required
      */
     public void setExpiryDate(LocalDate expiryDate) {
         this.expiryDate = expiryDate;
     }
     /**
-     * 
+     * getter for image
      * @return 
+     * return a String object
      */
     public String getImage() {
         return image;
     }
     /**
-     * 
+     * setter for image
      * @param image 
+     * A String object represents the image file is required
      */
     public void setImage(String image) {
         this.image = image;
@@ -93,6 +104,7 @@ public class Document {
     /**
      * 
      * @return 
+     * the details of the document
      */
     @Override
     public String toString() {

@@ -17,9 +17,13 @@ public abstract class User {
 	
 	/**
 	 * @param username
+         * A String object represents the name of the user
 	 * @param password
+         * A String object represents the password of the user
 	 * @param name
+         * A String object represents the name of the user
 	 * @param phone
+         * A String object represents the phone of the user
 	 */
 	public User(String username, String password,
 			String name, String phone) {
@@ -84,6 +88,8 @@ public abstract class User {
 	
         /**
 	 * @param trips the phone to set
+         * @return result 
+         * A String object
 	 */
 	public String viewTrips(List<Trip> trips){
 		String result = Optional.ofNullable(trips.stream().

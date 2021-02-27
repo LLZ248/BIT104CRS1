@@ -63,11 +63,11 @@ public class Trip {
         
 	/**
          * This a the constructor method for Trip object
-	 * @param description
-	 * @param tripDate
-	 * @param location
-	 * @param numVolunteers
-         * @param crisisType
+	 * @param description A String object 
+	 * @param tripDate A LocalDate obejct
+	 * @param location A String object
+	 * @param numVolunteers int 
+         * @param crisisType char
 	 */
 	public Trip(String description, LocalDate tripDate,
 			String location, int numVolunteers, 
@@ -163,6 +163,11 @@ public class Trip {
             return crisisType;
         }
         
+        /**
+         * 
+         * @param crisisType valid char will be F,E,W,f,e,w
+         * @return error code 0 if no error ,1 if invalid char
+         */
         public int setCrisisType(char crisisType) {
             switch (crisisType){
                 case 'F':case'f':
@@ -179,12 +184,21 @@ public class Trip {
                     return 1;
             }
         }
-
+        
+        /**
+         * 
+         * @return A List of Application
+         */
         public List<Application> getApplicationDetails() {
             return getApplicationHashTable().values().stream()
                     .collect(Collectors.toList());
         }
         
+        /**
+         * Check is theVolunteer already applied for this trip
+         * @param theVolunteerID A String object
+         * @return  true if repeated, false if not repeated
+         */
         public boolean isRepeatedVolunteer(String theVolunteerID){
             if (getApplicationHashTable().values().stream().
                     anyMatch(app->app.getVolunteerID().
@@ -194,6 +208,10 @@ public class Trip {
             return false;
         }
         
+        /**
+         * check is the applicationHashTable full yet
+         * @return false if not yet full, true if full
+         */
         public boolean isApplicationHashTableFull(){
             if(getApplicationHashTable().values().stream().
                     filter(app->app.getStatus().equalsIgnoreCase("ACCEPTED"))
@@ -203,6 +221,11 @@ public class Trip {
             return true;
         }
         
+        /**
+         * 
+         * @param theVolunteerID String
+         * @return result of the Volunteer's application for the trip
+         */
         public String getApplicationDetails(String theVolunteerID) {
             return getApplicationHashTable().values().stream().findFirst()
                     .filter(app->app.getVolunteerID()
@@ -210,13 +233,17 @@ public class Trip {
                     .map(Object::toString).orElse("");    
         }
 
+        /**
+         * 
+         * @return applicationHashTable 
+         */
         public Hashtable<String, Application> getApplicationHashTable() {
             return applicationHashTable;
         }
         
         /**
          * adding application into the applicationHashTable
-         * @param theVolunteer
+         * @param theVolunteerID String
          * @return error
          * 0. no error
          * 1. the table is already full
@@ -235,16 +262,18 @@ public class Trip {
         }
         
         /**
-         * 
-         * @param theApplicationID
-         * @param theApplicationStatus
-         * @return 
          * if the application hashtable is already full after approving an 
          * application, other applications in the hashtable will be set as
          * rejected
+         * 
+         * @param theApplicationID String
+         * @param theApplicationStatus String
+         * @return true if success false if failed
+         * 
          */
         public boolean changeApplicationStatusByApplicationID(
-                String theApplicationID, char theApplicationStatus){
+                String theApplicationID, char theApplicationStatus, 
+                String remarks){
             theApplicationStatus = Character.toUpperCase(theApplicationStatus);
             if(getApplicationHashTable().containsKey(theApplicationID)){
                 Application theApp = getApplicationHashTable()
@@ -265,6 +294,7 @@ public class Trip {
                                                 .next();
                                         if(app.getStatus().equals("NEW")){
                                             app.setStatus('R');
+                                            app.setRemarks(remarks);
                                         }
                                     }
                                 }
@@ -278,6 +308,7 @@ public class Trip {
                     }
                     //rejected
                     if(theApp.setStatus(theApplicationStatus)==0){
+                        theApp.setRemarks(remarks);
                         return true;
                     }else{
                         return false;//invalid type

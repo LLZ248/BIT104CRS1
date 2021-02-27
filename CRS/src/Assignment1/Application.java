@@ -27,7 +27,7 @@ public class Application {
         setVolunteerID(volunteerID);
         setApplicationDate(LocalDate.now());
         setStatus('N');
-        setRemarks("No remark yet");
+        setRemarks(null);
     }
     /**
      * 
