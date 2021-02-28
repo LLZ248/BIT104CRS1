@@ -3,7 +3,7 @@ import java.util.Optional;
 import java.time.LocalDate;
 /**
  *
- * @author LLZ
+ * @author Lee Lin Zheng B1802130
  */
 public class Staff extends User{
     private String position;
@@ -57,6 +57,10 @@ public class Staff extends User{
      */
     public void setDateJoined(LocalDate dateJoined) {
         this.dateJoined = dateJoined;
+    }
+    
+    public String viewTrips(){
+            return "";
     }
 
     @Override

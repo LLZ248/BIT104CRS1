@@ -1,10 +1,10 @@
 package Assignment1;
 
-import java.util.Optional;
 import java.util.ArrayList;
 
+
 /**
- * @author LLZ
+ * @author Lee Lin Zheng B1802130
  *
  */
 public class Volunteer extends User{
@@ -41,6 +41,9 @@ public class Volunteer extends User{
             return documentArr;
         }
         
+        public String viewTrips(){
+            return "";
+        }
         
 	@Override
 	public String toString() {

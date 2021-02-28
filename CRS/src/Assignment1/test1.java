@@ -25,7 +25,7 @@ public class test1  {
             System.out.println(trip2);
             Staff v1 = new Staff("Manager",null,null,null,null,null);
             System.out.println(v1);
-            System.out.println(v1.viewTrips(tripList1));
+            
             //Stream<Integer> streamIterated = Stream.iterate(40, n -> n).limit(20);
             //System.out.println(streamIterated.allMatch(element->element.equals(20)));
             //System.out.println(streamIterated.filter(element->element.equals(40)).collect(Collectors.toList()));

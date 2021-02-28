@@ -1,12 +1,9 @@
 package Assignment1;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.*;
 
 /**
- * @author LLZ
+ * @author Lee Lin Zheng B1802130
  *
  */
 public abstract class User {
@@ -85,20 +82,13 @@ public abstract class User {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
+        
         /**
-	 * @param trips the phone to set
-         * @return result 
-         * A String object
-	 */
-	public String viewTrips(List<Trip> trips){
-		String result = Optional.ofNullable(trips.stream().
-                        map(Object::toString).
-                        collect(Collectors.joining("\n"))).get();
-                
-                result = result.isBlank()? "\nNo Trip is available":result;
-                return result;
-	}
+         * 
+         * @param tripLista trip list to be displayed
+         * @return 
+         */
+        public abstract String viewTrips();
 
 	@Override
 	public String toString() {

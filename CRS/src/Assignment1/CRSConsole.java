@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author LLZ
+ * @author Lee Lin Zheng B1802130
  */
 public class CRSConsole {
     /**
@@ -50,12 +50,15 @@ public class CRSConsole {
     public static void main(String[] args) {
         
         //some prefined users for testing purpose
-        CRSUsers.put("LLZ248",new Volunteer("llz248","abc123","Lee Lin Zheng"
+        CRSUsers.put("LLZ248",new Volunteer("LLZ248","abc123","Lee Lin Zheng"
                 ,"0164487232"));
         CRSUsers.put("LLZ2248",new Staff("Senior",
                 stringToLocalDate("12/02/2020")
                 ,"LLZ248","abc123","Lee Lin Zheng","0164487232"));
-        
+        CRSTrips.put("TR00001",new Trip("Trip 1",LocalDate.of(2021,8,24),"Malaysia",20,'f'));
+        CRSTrips.put("TR00002",new Trip("Trip 2",LocalDate.of(2021,8,24),"Malaysia",20,'f'));
+        addKAndListVintoHashtable(CRSAssignedTrips,"LLZ2248","TR00001");
+        addKAndListVintoHashtable(CRSAssignedTrips,"LLZ2248","TR00002");
         boolean quit = false;
         while(!quit){
             quit = menu1();  
@@ -100,20 +103,24 @@ public class CRSConsole {
             System.out.print(
                         "\nSign up as Volunteer  [S]" +
                         "\nLogin                 [L]" +
-                        "\nOther key to quit        " +
+                        "\nQuit                  [Q]" +
                         "\nYour choice            : ");
             switch(sc.next().charAt(0)){
                 case 's':case 'S':
-                    System.out.println("Please enter your personal information");
+                    System.out.println("Please enter your personal "
+                            + "information");
                     signUpAsVolunteer();
                     break;
                 case 'L':case 'l':
                     System.out.println("Please login your account:\n");
                     repeat = !handleLogin();
                     break;
-                default:
+                case 'q':case'Q':
                     repeat = false;
                     quit = true;
+                    break;
+                default:
+                    System.out.println("Invalid Choice");
                     break;
             }  
         }
@@ -156,7 +163,7 @@ public class CRSConsole {
                 
             case MANAGER:
                 System.out.println("[1]Record New Staff");
-                System.out.println("[2]View All Trips");
+                System.out.println("[2]View All Trips and Applications");
                 System.out.println("[3]View All Staff");
                 System.out.println("[4]View All Volunteer");
                 System.out.println("[Q/q]sign out [BACK TO MAIN PAGE]");
@@ -201,6 +208,7 @@ public class CRSConsole {
      * @return a boolean object represent quit or not
      */
     public static boolean handleStaffMenu(char choice){
+        currentUser = (Staff)currentUser;
         switch(choice){
             case '1':
                 organizeTrip();return true;
@@ -262,15 +270,20 @@ public class CRSConsole {
        }valid =false;
        //number of volunteers
        while(!valid){
-           System.out.print("Number of volunteers required : ");
-           try{
-               numOfVolunteer = sc.nextInt();
-           }catch(Exception e){
-               System.out.println("Answer must be a number!");
+           
+           while(true){
+               try{
+                    System.out.print("Number of volunteers required : ");
+                    numOfVolunteer = sc.nextInt();
+                    break;
+                }catch(Exception e){
+                    System.out.println("Answer must be a number!");
+                    sc.next();
+                }
            }
-           if(numOfVolunteer<=0)System.out.println("Invalid number! "
-                   + "Must be greater than 0");
-           else valid = true;
+            if(numOfVolunteer<=0)System.out.println("Invalid number! "
+                + "Must be greater than 0");
+             else valid = true;
        }
        
        //display the trip informtaion for confirmation
@@ -305,21 +318,14 @@ public class CRSConsole {
                         .stream().map(Object::toString)
                         .collect(Collectors.joining("\n"));
                 if(applicationResult.isBlank()){
-                    applicationResult = "No applications yet";
-                }else{
-                    isThereAnyApplication = true;
+                    applicationResult = "\nNo applications yet"+
+                            "\n----------------------------"
+                            + "-------";
                 }
                 System.out.println("Trip: \n"+theTrip+"\nThe Trip "
                         +theTrip.getTripID()+" Applications: \n"
                         +applicationResult);
             }
-            if(isThereAnyApplication){
-                
-            }else{
-                System.out.println("-----------------------------------");
-                System.out.println("\nNo application is submmited yet.");
-            }
-
         }else{
             System.out.println("You have not created any trip yet");
         }
@@ -341,7 +347,9 @@ public class CRSConsole {
                         .stream().map(Object::toString)
                         .collect(Collectors.joining("\n"));
                 if(applicationResult.isBlank()){
-                    applicationResult = "No applications yet";
+                    applicationResult =  "\nNo applications yet"+
+                            "\n----------------------------"
+                            + "-------";
                 }else{
                     isThereAnyApplication = true;
                 }
@@ -398,9 +406,6 @@ public class CRSConsole {
                     System.out.println("This application has already been "
                             + "processed before!");
                 }
-            }else{
-                System.out.println("-----------------------------------");
-                System.out.println("\nNo application is submmited yet.");
             }
 
         }else{
@@ -415,6 +420,7 @@ public class CRSConsole {
      */
     public static boolean handleVolunteerMenu(char choice){
         System.out.println("");
+        currentUser = (Volunteer)currentUser;
         switch(choice){
             case '1':
                 manageVolunteerProfile();return true;
@@ -436,6 +442,8 @@ public class CRSConsole {
      * or upload a document.
      */
     public static void manageVolunteerProfile(){
+        System.out.println("Your current information");
+        System.out.println(currentUser+"\n");
         System.out.println("Enter your choice :");
         System.out.println("[1]Change password ");
         System.out.println("[2]Change phone number ");
@@ -451,6 +459,7 @@ public class CRSConsole {
                         ,"Invalid password:Null Password!");
                 currentUser.setPassword(newPwsd);
                 System.out.println("Password Changed.");
+                System.out.println("Your current information");
                 System.out.println(CRSUsers.get(currentUser.getUsername()));
                 break;
             case '2':
@@ -459,6 +468,7 @@ public class CRSConsole {
                         "Enter your new phone number :");
                 currentUser.setPhone(newPhoneNumber);
                 System.out.println("Phone number Changed.");
+                System.out.println("Your current information");
                 System.out.println(CRSUsers.get(currentUser.getUsername()));
                 break;
             case '3':
@@ -468,6 +478,7 @@ public class CRSConsole {
                         "Invalid Name:Null Name!");
                 currentUser.setName(newName);
                 System.out.println("Name Changed.");
+                System.out.println("Your current information");
                 System.out.println(CRSUsers.get(currentUser.getUsername()));
                 break;
             case '4':
@@ -542,7 +553,16 @@ public class CRSConsole {
             System.out.print("Enter the Trip ID : ");
             String tripID = sc.next().toUpperCase();
             if(CRSTrips.containsKey(tripID)){
-                switch(CRSTrips.get(tripID)
+                if(!CRSTrips.values().stream().filter(t->t.
+                        isRepeatedVolunteer(currentUser.getUsername())).
+                        filter(t->!t.getTripID().equalsIgnoreCase(tripID)).
+                        map(Trip::getTripDate).collect(Collectors.toList()).
+                        stream().allMatch(t->!t.equalsIgnoreCase(CRSTrips.
+                                get(tripID).getTripDate()))){
+                    System.out.println("You have already applied for a trip "
+                            + "which is on the same day!");
+                }else{
+                    switch(CRSTrips.get(tripID)
                         .addNewApplication(currentUser.getUsername())){
                     case 0:
                         System.out.println("Application submitted "
@@ -554,11 +574,11 @@ public class CRSConsole {
                                 + "this trip!");break;
                     default:
                         break;
+                    }
                 }
-                
+
             }else{
-                System.out.println("Trip with the TripID is not"
-                        + " found.");
+                System.out.println("Trip with the TripID is not found.");
             }
         }
     }
@@ -570,13 +590,21 @@ public class CRSConsole {
      * application status and remarks will be shown. 
      */
     public static void viewApplicationStatus(){
-        String result = CRSTrips.values().stream().map(t->t.
-                getApplicationDetails(currentUser.getUsername())).
-                collect(Collectors.joining("\n"));
+        String result = "";
+        Iterator it = CRSTrips.values().stream().filter(t->t.
+                isRepeatedVolunteer(currentUser.getUsername()))
+                .collect(Collectors.toList()).iterator(); 
+        while(it.hasNext()){
+            Trip trip = (Trip)it.next();
+            result = result + trip +"\n";
+            result = result + trip.getApplicationDetails(
+                    currentUser.getUsername())+
+                    "\n----------------------------------------\n";
+        }
         if(result.isBlank()){
-            System.out.println(result);
-        }else{
             System.out.println("You have not applied for any trip yet.");
+        }else{
+            System.out.println(result);
         }
     }
     
@@ -634,6 +662,7 @@ public class CRSConsole {
                 System.out.println("Login Successfully");
                 System.out.println("Hi, "+
                         CRSUsers.get(uInfo[0]).getName());
+                
                 return true;
             //invalid login cases
             case 1:
@@ -803,21 +832,23 @@ public class CRSConsole {
      * @return result in String 
      */
     public static String viewTrips(){
-        String result = null;
+        String result = "";
         if(CRSTrips.isEmpty()){
             result = "No trip is created yet.";
         }else{
             Iterator it = CRSTrips.values().iterator();
             while(it.hasNext()){
                 Trip trip = (Trip)it.next();
-                result = result + trip.toString();
+                result = result +"Trip information:\n"+ trip.toString();
                 String result2 = trip.getApplicationDetails().stream()
                         .map(Object::toString).
                         collect(Collectors.joining("\n"));
                 result2 = result2.isBlank()?"\nNo application for "
                         + "this trip yet.":result2;
-                result = result +result2+
-                        "----------------------------------\n";
+                result = result+
+                        "\n----------------------------------\n"+"Application "
+                        + "information:\n"+result2+
+                        "\n----------------------------------\n";
             }
         }
         return result;

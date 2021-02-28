@@ -11,7 +11,7 @@ import java.util.List;
 * 
 * 
 * 
-* @author B1802130
+* @author Lee Lin Zheng B1802130
 * 
 */
 public class Trip {
@@ -227,10 +227,10 @@ public class Trip {
          * @return result of the Volunteer's application for the trip
          */
         public String getApplicationDetails(String theVolunteerID) {
-            return getApplicationHashTable().values().stream().findFirst()
+            return getApplicationHashTable().values().stream()
                     .filter(app->app.getVolunteerID()
-                    .equalsIgnoreCase(theVolunteerID))
-                    .map(Object::toString).orElse("");    
+                    .equalsIgnoreCase(theVolunteerID)).findFirst()
+                    .map(Object::toString).orElse("");  
         }
 
         /**

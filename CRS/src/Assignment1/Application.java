@@ -3,7 +3,7 @@ import java.util.Optional;
 import java.time.LocalDate;
 /**
  *
- * @author LLZ
+ * @author Lee Lin Zheng B1802130
  */
 public class Application {
     private static int applicationIDCount = 1;
