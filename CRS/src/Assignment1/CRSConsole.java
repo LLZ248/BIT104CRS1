@@ -48,20 +48,8 @@ public class CRSConsole {
      * @param args arguments
      */
     public static void main(String[] args) {
-        
-        //some prefined users for testing purpose
-        CRSUsers.put("LLZ248",new Volunteer("LLZ248","abc123","Lee Lin Zheng"
-                ,"0164487232"));
-        CRSUsers.put("LLZ2248",new Staff("Senior",
-                stringToLocalDate("12/02/2020")
-                ,"LLZ248","abc123","Lee Lin Zheng","0164487232"));
-        CRSTrips.put("TR00001",new Trip("Trip 1",LocalDate.of(2021,8,24),"Malaysia",20,'f'));
-        CRSTrips.put("TR00002",new Trip("Trip 2",LocalDate.of(2021,8,24),"Malaysia",20,'f'));
-        addKAndListVintoHashtable(CRSAssignedTrips,"LLZ2248","TR00001");
-        addKAndListVintoHashtable(CRSAssignedTrips,"LLZ2248","TR00002");
-        boolean quit = false;
-        while(!quit){
-            quit = menu1();  
+        while(true){
+            if( menu1()) break;  
         }
         //quit application
         System.out.println("Quitting CRSconsole.......");

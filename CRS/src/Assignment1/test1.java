@@ -105,7 +105,14 @@ public class test1  {
                 .map(Object::toString).collect(Collectors.joining("\n"));
         result = result.isBlank()?"No staff is recorded.":result;
         System.out.println(result);
-
+        
+        
+        ArrayList<User> userList = new ArrayList<>();
+        userList.add(new Volunteer("dummy","abc123","dummy","999"));
+        userList.add(new Volunteer("dummy2","abc123","dummy2","999"));
+        String testName = "dummy2";String testPassword = "abc123";
+        boolean verify = userList.stream().anyMatch(u->u.getUsername().equalsIgnoreCase(testName)&&u.getPassword().equals(testPassword));
+        System.out.println(verify);
     }
     /**
      * 
