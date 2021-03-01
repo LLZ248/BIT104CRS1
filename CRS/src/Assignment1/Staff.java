@@ -1,6 +1,9 @@
 package Assignment1;
 import java.util.Optional;
 import java.time.LocalDate;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 /**
  *
  * @author Lee Lin Zheng B1802130
@@ -59,9 +62,22 @@ public class Staff extends User{
         this.dateJoined = dateJoined;
     }
     
-    public String viewTrips(){
-            return "";
+    public String viewTrips(List<Trip> tripList){
+        String result ="";
+        Iterator it = tripList.iterator();
+        while(it.hasNext()){
+            Trip trip = (Trip)it.next();
+            result = result + trip+"\n Applications:\n";
+            String result2 = trip.
+                    getApplicationDetails().stream().map(Object::toString)
+                    .collect(Collectors.joining("\n\n"));
+            result2=result2.isBlank()?"No application yet":result2;
+            result = result+"\n---------------------------------\n"
+                    +result2+"\n---------------------------------\n";
+        }
+        return result;
     }
+    
 
     @Override
     public String toString() {

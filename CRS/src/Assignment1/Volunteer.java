@@ -1,6 +1,9 @@
 package Assignment1;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -41,15 +44,35 @@ public class Volunteer extends User{
             return documentArr;
         }
         
-        public String viewTrips(){
-            return "";
+        /**
+         * get a list of documents of the user in string, empty if no document
+         * @return result 
+         */
+        public String getDocumentArrAsString(){
+            String result = getDocumentArr().stream().map(Object::toString)
+                    .collect(Collectors.joining("\n"));
+            result = result.isBlank()?"":result;
+            return result;
+        }
+       
+        /**
+         * return a list of trips in string to be viewed by the volunteer
+         * @param tripList the trip list
+         * @return all trips in string
+         */
+        public String viewTrips(List<Trip> tripList){
+            return tripList.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("\n"));
         }
         
 	@Override
 	public String toString() {
-                
-		return "\nVolunteer Information:"
-                        +super.toString();
+                String result="\nVolunteer Information:"+super.toString();
+                String result2 = getDocumentArrAsString();
+                result2 = result2.isBlank()?"No Document yet":result2;
+                result = result +"\nDocument Information: \n"+result2;
+                return result;
 	}
 	
 	

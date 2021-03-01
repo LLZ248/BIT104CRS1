@@ -194,6 +194,11 @@ public class Trip {
                     .collect(Collectors.toList());
         }
         
+        public boolean hasNoApplication(){
+            if(getApplicationHashTable().size()==0)return true;
+            return false;
+        }
+        
         /**
          * Check is theVolunteer already applied for this trip
          * @param theVolunteerID A String object

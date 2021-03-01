@@ -1,5 +1,6 @@
 package Assignment1;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,7 +25,7 @@ public abstract class User {
 	 */
 	public User(String username, String password,
 			String name, String phone) {
-		setUsername(username);
+		setUsername(username.toUpperCase());
 		setPassword(password);
 		setName(name);
 		setPhone(phone);
@@ -83,12 +84,8 @@ public abstract class User {
 		this.phone = phone;
 	}
         
-        /**
-         * 
-         * @param tripLista trip list to be displayed
-         * @return 
-         */
-        public abstract String viewTrips();
+        public abstract String viewTrips(List<Trip> tripList);
+        
 
 	@Override
 	public String toString() {

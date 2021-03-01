@@ -50,6 +50,8 @@ public class Document {
     public DocumentType getDocumentType() {
         return documentType;
     }
+
+    
     /**
      * setter for 
      * @param documentType documentType
