@@ -340,7 +340,8 @@ public class CRSConsole {
             remarks=remarks.isBlank()?null:remarks;
             
 
-            switch(crs.manageApplication(tripID, appID, choice, remarks)){
+            switch(crs.manageApplication(currentUser.getUsername(), 
+                    appID, choice, remarks)){
                 case 0:
                     System.out.println("Application status changed"
                         + " successfully.");break;
@@ -518,6 +519,9 @@ public class CRSConsole {
                 case 4:
                     System.out.println("The Trip with the trip ID "+
                             tripID+" is not found");break;
+                case 5:
+                    System.out.println("You have already applied for a trip "
+                            + "which is on the same day");break;
                 default:
                     break;
             }

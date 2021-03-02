@@ -271,10 +271,11 @@ public class CRS{
      * return int
      * 0 - No error<br>
      * 1 - No trip is currently available.<br>
-     * 2 - The Volunteer has already applied for a trip which 
-     * is on the same day<br>
+     * 2 - The Volunteer has already sign up for the trip<br>
      * 3 - The Trip is already full<br>
      * 4 - The Trip with the trip ID is not found<br>
+     * 5 - The Volunteer has already applied for a trip which 
+     * is on the same day
      * 
      */
     public int addVolunteerIntoTrip(String username,String tripID){
@@ -289,7 +290,7 @@ public class CRS{
                         map(Trip::getTripDate).collect(Collectors.toList()).
                         stream().allMatch(t->!t.equalsIgnoreCase(CRSTrips.
                                 get(tripID).getTripDate()))){
-                    return 2;
+                    return 5;
                 }else{
                     switch(CRSTrips.get(tripID)
                         .addNewApplication(username)){

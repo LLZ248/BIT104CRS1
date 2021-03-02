@@ -284,14 +284,24 @@ public class Trip {
                 Application theApp = getApplicationHashTable()
                         .get(theApplicationID);
                 if(theApp.getStatus().equalsIgnoreCase("ACCEPTED")
-                        ||theApp.getStatus().equalsIgnoreCase("REJECTED"))
+                        ||theApp.getStatus().equalsIgnoreCase("REJECTED")){
+                    System.out.println("This app is processed");
                     return false;
+                }
                 else{
                     if(theApplicationStatus == 'A'){
+                        System.out.println("Accepted");
                         //accepted
                         if(!isApplicationHashTableFull()){
                             if(theApp.setStatus(theApplicationStatus)==0){
+                                System.out.println("Set status to approved");
+                                theApp.setRemarks(remarks);
+                                //check is the hashtable full after approving 
+                                //this applcation
                                 if(isApplicationHashTableFull()){
+                                    System.out.println("Full, make R");
+                                    //loop the hashtable and make other NEW 
+                                    //application became REJECTED
                                     Iterator it = getApplicationHashTable()
                                             .values().iterator();
                                     while(it.hasNext()){
@@ -305,14 +315,18 @@ public class Trip {
                                 }
                                 return true;
                             }else{
+                                System.out.println("Invalid Type");
                                 return false;//invalid type
                             }
                         }else{
+                            //the application table is alreay full
+                            System.out.println("The application table is full");
                             return false;
                         }
                     }
                     //rejected
-                    if(theApp.setStatus(theApplicationStatus)==0){
+                    else if(theApp.setStatus(theApplicationStatus)==0){
+                        System.out.println("Rejected");
                         theApp.setRemarks(remarks);
                         return true;
                     }else{
