@@ -119,11 +119,37 @@ public class CRS{
     }
 
     /**
+     * Check is the staff responsible for the trip
+     * @param username the staff username
+     * @param tripID the tripID
+     * @return result boolean
+     */
+    public boolean isStaffResponsibleForTrip(String username,String tripID){
+        isStaff(username);
+        boolean result = false;
+        if(getCRSAssignedTrips().containsKey(username)){
+            if(getCRSAssignedTrips().get(username).contains(tripID)){
+                result = true;
+            }
+        }
+        return result;
+    }
+    /**
      * getter for CRSTrips
      * @return CRSTrips
      */
     public Hashtable<String, Trip> getCRSTrips() {
         return CRSTrips;
+    }
+    
+    /**
+     * find a trip throw error if cannot find
+     * @param tripID the id of the trip
+     * @return trip
+     * @throws NoSuchElementException if no trip with this tripID is found
+     */
+    public Trip findTrip(String tripID){
+        return Optional.ofNullable(getCRSTrips().get(tripID)).orElseThrow();
     }
     
     /**
@@ -179,8 +205,10 @@ public class CRS{
         return null;
     }
     
+    
+    
     /**
-     * Staff method. Display the trips and applications of the trips by the 
+     * Staff method. Display all the applications of the trips by the 
      * staff and manage those application.
      * @param staffUsername the staff username
      * @param appID application ID to be processed
@@ -268,7 +296,7 @@ public class CRS{
      * add volunteer into a trip
      * @param username the username of the volunteer
      * @param tripID the trip id
-     * return int
+     * @return int
      * 0 - No error<br>
      * 1 - No trip is currently available.<br>
      * 2 - The Volunteer has already sign up for the trip<br>
@@ -318,6 +346,8 @@ public class CRS{
      * his or her applications. The volunteer select to view the trips that 
      * they have applied for. The trip date, description and 
      * application status and remarks will be shown. 
+     * @param username the volunteer username
+     * @return the message
      */
     public String viewApplicationStatus(String username){
         try{

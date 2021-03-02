@@ -9,6 +9,7 @@ import java.util.stream.*;
 import java.time.format.*;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -313,53 +314,92 @@ public class CRSConsole {
     /**
      * Staff method. Display the trips and applications of the trips by the 
      * staff and manage those application.
+     * @return true or false
      */
-    public static void manageApplication(){
-        boolean[] check = viewApplication();
-        if(check[0]&&check[1]){
-            String tripID=null;String appID=null;
-            
-            //ask for application id to be processed
-            System.out.print("Enter the Application ID that you "
-                + "wished to process: ");
-            appID = sc.next().toUpperCase();
-            
-           //ask for choice
-            char choice;
-            while(true){
-                System.out.print("[A]ccept or [R]eject ? ");
-                choice = Character.toUpperCase(sc.next().charAt(0));
-                if (choice == 'A'||choice =='R')break;
-                System.out.println("Invalid choice!!");
-            }
-            //remarks
-            System.out.print("Enter remarks [Press Enter if "
-                    + "no remarks]: ");
-            sc.nextLine();
-            String remarks = sc.nextLine();
-            remarks=remarks.isBlank()?null:remarks;
-            
-
-            switch(crs.manageApplication(currentUser.getUsername(), 
-                    appID, choice, remarks)){
-                case 0:
-                    System.out.println("Application status changed"
-                        + " successfully.");break;
-                case 1:
-                    System.out.println(
-                            "Invalid Application ID!Possible reasons are:"+ 
-                            "\n1.You are not responsible for this trip."+
-                            "\n2.Not exisitng application ID.");break;
-                case 2:
-                    System.out.println("This application has already been "
-                        + "processed before!");break;
-                default:
-                    System.out.println("Somthing is wrong.Pls try again");
-                    break;
-            }
-        }else{
-            System.out.println("There is no application yet");
+    public static boolean manageApplication(){
+        Optional<List<String>> tripIDs = 
+                crs.searchTripsforStaff(currentUser.getUsername());
+        if(tripIDs.isEmpty()){
+            System.out.println("The staff has not recorded any trip yet");
+            return false;
         }
+        Iterator it = tripIDs.get().iterator();
+        while(it.hasNext()){
+            System.out.println(crs.getCRSTrips().get(it.next()));
+        }
+        System.out.println("----------------------------------\n");
+        System.out.print("Enter the trip id that you wished to manage: ");
+        String tripID=sc.next().toUpperCase();
+        Trip theTrip = null;
+        try{
+            theTrip = crs.findTrip(tripID);
+        }catch(NoSuchElementException e){
+            //invalid trip ID
+            System.out.println("Not exisiting tripID");
+            return false;
+        }
+
+        if(!crs.isStaffResponsibleForTrip(currentUser.getUsername(),
+                tripID)){
+            System.out.println("You are not responsible for this trip");
+            return false;
+        }
+        if(theTrip.isApplicationHashTableFull()){
+            System.out.println("The trip is already full");
+            return false;
+        }
+        if(theTrip.getApplicationDetails().isEmpty()){
+            System.out.println("The trip has no applications yet.");
+            return false;
+        }
+        
+        String appID=null;
+        System.out.println(theTrip);
+        System.out.println("The Application(s) submitted :\n");
+        theTrip.getApplicationDetails().forEach(
+                app->{
+                System.out.println(app+"\n");
+                System.out.println(crs.findUser(app.getVolunteerID()));
+                System.out.println("-----------------------------");});
+
+        //ask for application id to be processed
+        System.out.print("Enter the Application ID that you "
+            + "wished to process: ");
+        appID = sc.next().toUpperCase();
+
+       //ask for choice
+        char choice;
+        while(true){
+            System.out.print("[A]ccept or [R]eject ? ");
+            choice = Character.toUpperCase(sc.next().charAt(0));
+            if (choice == 'A'||choice =='R')break;
+            System.out.println("Invalid choice!!");
+        }
+        //remarks
+        System.out.print("Enter remarks [Press Enter if "
+                + "no remarks]: ");
+        sc.nextLine();
+        String remarks = sc.nextLine();
+        remarks=remarks.isBlank()?null:remarks;
+
+        switch(crs.manageApplication(currentUser.getUsername(), 
+                appID, choice, remarks)){
+            case 0:
+                System.out.println("Application status changed"
+                    + " successfully.");break;
+            case 1:
+                System.out.println(
+                        "Invalid Application ID!Possible reasons are:"+ 
+                        "\n1.You are not responsible for this trip."+
+                        "\n2.Not exisitng application ID.");break;
+            case 2:
+                System.out.println("This application has already been "
+                    + "processed before!");break;
+            default:
+                System.out.println("Somthing is wrong.Pls try again");
+                break; 
+        }
+        return true;
     }
     
     /**
@@ -496,6 +536,7 @@ public class CRSConsole {
      * The status is set to “NEW”.
      */
     public static void applyForTrip(){
+        System.out.println("Current Trips:\n");
         System.out.println(currentUser.viewTrips(crs.getCRSTrips().values()
                 .stream().collect(Collectors.toList())));
         if (crs.addVolunteerIntoTrip(null,null) ==1){
@@ -536,6 +577,7 @@ public class CRSConsole {
      * application status and remarks will be shown. 
      */
     public static void viewApplicationStatus(){
+        System.out.println("------Application(s) Submitted-------------");
         System.out.println(crs.viewApplicationStatus(currentUser.
                 getUsername()));
     }

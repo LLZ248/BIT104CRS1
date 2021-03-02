@@ -84,6 +84,11 @@ public abstract class User {
 		this.phone = phone;
 	}
         
+        /**
+         * abstarct method to view the trips
+         * @param tripList the list of trips to be shown
+         * @return the result in string
+         */
         public abstract String viewTrips(List<Trip> tripList);
         
 

@@ -194,6 +194,10 @@ public class Trip {
                     .collect(Collectors.toList());
         }
         
+        /**
+         * check is the trip has any application
+         * @return true is empty false if there is any application
+         */
         public boolean hasNoApplication(){
             if(getApplicationHashTable().size()==0)return true;
             return false;
@@ -270,7 +274,7 @@ public class Trip {
          * if the application hashtable is already full after approving an 
          * application, other applications in the hashtable will be set as
          * rejected
-         * 
+         * @param remarks String
          * @param theApplicationID String
          * @param theApplicationStatus String
          * @return true if success false if failed
@@ -285,7 +289,6 @@ public class Trip {
                         .get(theApplicationID);
                 if(theApp.getStatus().equalsIgnoreCase("ACCEPTED")
                         ||theApp.getStatus().equalsIgnoreCase("REJECTED")){
-                    System.out.println("This app is processed");
                     return false;
                 }
                 else{
@@ -294,12 +297,10 @@ public class Trip {
                         //accepted
                         if(!isApplicationHashTableFull()){
                             if(theApp.setStatus(theApplicationStatus)==0){
-                                System.out.println("Set status to approved");
                                 theApp.setRemarks(remarks);
                                 //check is the hashtable full after approving 
                                 //this applcation
                                 if(isApplicationHashTableFull()){
-                                    System.out.println("Full, make R");
                                     //loop the hashtable and make other NEW 
                                     //application became REJECTED
                                     Iterator it = getApplicationHashTable()
@@ -309,24 +310,20 @@ public class Trip {
                                                 .next();
                                         if(app.getStatus().equals("NEW")){
                                             app.setStatus('R');
-                                            app.setRemarks(remarks);
                                         }
                                     }
                                 }
                                 return true;
                             }else{
-                                System.out.println("Invalid Type");
                                 return false;//invalid type
                             }
                         }else{
                             //the application table is alreay full
-                            System.out.println("The application table is full");
                             return false;
                         }
                     }
                     //rejected
                     else if(theApp.setStatus(theApplicationStatus)==0){
-                        System.out.println("Rejected");
                         theApp.setRemarks(remarks);
                         return true;
                     }else{
