@@ -35,18 +35,25 @@ public class CRSConsole {
         System.out.print("Enter Admin Password: ");
         String adminPassword = sc.next();
         crs = new CRS(adminUsername,adminPassword);
-        
-        Volunteer v1 = new Volunteer("LLZ248", "abc123", "Lee Lin Zheng", "0164487232");
+        /*Testing 
+        Volunteer v1 = new Volunteer("LLZ248", "abc123", "Lee Lin Zheng", 
+        "0164487232");
         crs.addVolunteer(v1);
-        Staff s1 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0001", "abc123", "Ahamd", "016887545");
-        Staff s2 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0002", "abc123", "Ali", "0115487122");
+        Staff s1 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0001", 
+        "abc123", "Ahamd", "016887545");
+        Staff s2 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0002", 
+        "abc123", "Ali", "0115487122");
         crs.addStaff(s1);
         crs.addStaff(s2);
-        crs.addCRSTrip("EMP0001", new Trip("This is a trip",LocalDate.of(2021, 3, 24),"Kuala lumpur",10,'F'));
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.of(2022, 4, 24),"Pic1.jpg") );
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.of(2022, 4, 24),"Pic1.jpg") );
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.of(2022, 4, 24),"Pic1.jpg") );
-        
+        crs.addCRSTrip("EMP0001", new Trip("This is a trip",LocalDate.
+        of(2021, 3, 24),"Kuala lumpur",10,'F'));
+        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
+        of(2022, 4, 24),"Pic1.jpg") );
+        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
+        of(2022, 4, 24),"Pic1.jpg") );
+        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
+        of(2022, 4, 24),"Pic1.jpg") );
+        */
         while(true){
             if(menu1()) break;  
         }
