@@ -3,7 +3,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 /**
  *
- * @author Lee Lin Zheng B1802130
+ * @author Lee Lin Zheng B1802130<br>
+ * represents the document submitted by volunteer
  */
 public class Document {
     
@@ -76,8 +77,9 @@ public class Document {
      * return "No Expiry Date" if null
      */
     public String getExpiryDate() {
-        return Optional.ofNullable(""+expiryDate)
-                .orElseGet(()->"No Expiry Date") ;
+        Optional<LocalDate> oDate = Optional.ofNullable(expiryDate);
+        if(oDate.isPresent())return ""+ this.expiryDate;
+        return "No Expiry Date";
     }
     /**
      * setter for expiryDate
@@ -115,7 +117,5 @@ public class Document {
                 "\nImage          : " + getImage();
                 
     }
-    
-    
-    
+
 }

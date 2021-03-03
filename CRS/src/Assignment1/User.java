@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Lee Lin Zheng B1802130
- *
+ * @author Lee Lin Zheng B1802130<br>
+ * represents the user
+ * parent class for volunteer and staff
  */
 public abstract class User {
 	private String username;
@@ -90,7 +91,6 @@ public abstract class User {
          * @return the result in string
          */
         public abstract String viewTrips(List<Trip> tripList);
-        
 
 	@Override
 	public String toString() {
@@ -98,9 +98,6 @@ public abstract class User {
                         "\nPassword     : " + getPassword() + 
                         "\nName         : " + getName() + 
                         "\nPhone        : " + getPhone();
-	}
-	
-	
-	
+	}	
 }
 

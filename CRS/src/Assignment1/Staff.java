@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 /**
  *
- * @author Lee Lin Zheng B1802130
+ * @author Lee Lin Zheng B1802130<br>
+ * represents the staff 
+ * A staff is created by the CRS Manager.
+ * The staff can create trip and manage the applications of the trip
  */
 public class Staff extends User{
     private String position;

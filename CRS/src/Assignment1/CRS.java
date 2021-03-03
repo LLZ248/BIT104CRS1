@@ -12,7 +12,18 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author Lee Lin Zheng B1802130
+ * @author Lee Lin Zheng B1802130<br>
+ * Represents the container class and represents the whole CRS system<br>
+ * It stores three hashtables.<br>
+ * <ol>
+ * <li>Stores the users(Staff and Volunteer).The key is the username, value
+ * is the User</li>
+ * <li>Stores the trips.The key is tripID, value is the trip</li>
+ * <li>Stores the information about who records the trip. It store staff 
+ * username and trip ID.
+* When A staff records a trip, the staff username will be recorded as the
+* key, and the tripID will be stored as the value in the List </li>
+ * </ol>
  */
 public class CRS{
 
@@ -26,8 +37,10 @@ public class CRS{
     //Hash table to store Trip objects 
     private Hashtable<String,Trip> CRSTrips;
     
-    //Hash table to record which staff record the assigned trips
-    //store staff username and trip ID
+    /**
+     * Hash table to record which staff record the assigned trips.
+     * 
+    */
     private Hashtable<String,List<String>> CRSAssignedTrips;
     
     //valid userType in the system
@@ -37,6 +50,7 @@ public class CRS{
     
     /**
      * constructor for CRS
+     * requires the CRS manager username and password
      * @param adminUsername String
      * @param adminPassword String
      */
@@ -500,7 +514,7 @@ public class CRS{
     
     /**
      * add key and value into a hashtable. If the key
-     * already exists, the add value into the List. If new key and value,
+     * already exists, the add value into the List(value). If new key and value,
      * create a new list and add the value into the list, then put the 
      * key and list into the hashtable.
      * @param ht the hashtable

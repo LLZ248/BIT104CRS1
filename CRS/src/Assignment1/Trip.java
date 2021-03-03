@@ -11,8 +11,9 @@ import java.util.List;
 * 
 * 
 * 
-* @author Lee Lin Zheng B1802130
-* 
+* @author Lee Lin Zheng B1802130<br>
+* represents the trip 
+* each trip is created by a staff and can be applied by multiple volunteers
 */
 public class Trip {
         /**

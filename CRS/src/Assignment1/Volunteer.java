@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * @author Lee Lin Zheng B1802130
- *
+ * @author Lee Lin Zheng B1802130<br>
+ * represents a volunteer 
+ * Volunteer can apply application for trip
  */
 public class Volunteer extends User{
         ArrayList<Document> documentArr;

@@ -13,7 +13,9 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author Lee Lin Zheng B1802130
+ * @author Lee Lin Zheng B1802130 <br>
+ * A text based console for user to interact with CRS
+ * 
  */
 public class CRSConsole {
     /**
@@ -30,30 +32,11 @@ public class CRSConsole {
      */
     public static void main(String[] args) {
         //Setting up the admin username and password
-        System.out.print("Enter Admin Username: ");
+        System.out.print("Enter Manager Username: ");
         String adminUsername = sc.next();
-        System.out.print("Enter Admin Password: ");
+        System.out.print("Enter Manager Password: ");
         String adminPassword = sc.next();
         crs = new CRS(adminUsername,adminPassword);
-        /*Testing 
-        Volunteer v1 = new Volunteer("LLZ248", "abc123", "Lee Lin Zheng", 
-        "0164487232");
-        crs.addVolunteer(v1);
-        Staff s1 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0001", 
-        "abc123", "Ahamd", "016887545");
-        Staff s2 = new Staff("senior", LocalDate.of(2020,8,24), "EMP0002", 
-        "abc123", "Ali", "0115487122");
-        crs.addStaff(s1);
-        crs.addStaff(s2);
-        crs.addCRSTrip("EMP0001", new Trip("This is a trip",LocalDate.
-        of(2021, 3, 24),"Kuala lumpur",10,'F'));
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
-        of(2022, 4, 24),"Pic1.jpg") );
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
-        of(2022, 4, 24),"Pic1.jpg") );
-        crs.addDocumentForVolunteer("LLZ248",new Document('p',LocalDate.
-        of(2022, 4, 24),"Pic1.jpg") );
-        */
         while(true){
             if(menu1()) break;  
         }
@@ -521,8 +504,8 @@ public class CRSConsole {
                             stringToLocalDate(docExpireDate),docPicture);
                 }
                 System.out.println(dummyDocument);
-                System.out.println("Is the document information correct? "
-                        + "[Y]es/[N]o");
+                System.out.print("Is the document information correct? "
+                        + "[Y]es/[N]o : ");
                 if(Character.toLowerCase(sc.next().charAt(0))=='y')
                    crs.addDocumentForVolunteer(currentUser.getUsername(),
                            dummyDocument);
@@ -643,7 +626,7 @@ public class CRSConsole {
             case -99:
                 currentUserType = CRS.UserType.MANAGER;
                 System.out.println("Login Successfully");
-                System.out.println("Hi, Admin");
+                System.out.println("Hi, Manager");
                 return true;
             default:
                 return false;
@@ -817,23 +800,4 @@ public class CRSConsole {
         System.out.println("Logged Out...");
     }
     
-    /**
-     * add key and value into a hashtable. If the key
-     * already exists, the add value into the List. If new key and value,
-     * create a new list and add the value into the list, then put the 
-     * key and list into the hashtable.
-     * @param ht the hashtable
-     * @param k key
-     * @param v value
-     */
-    public static void addKAndListVintoHashtable(
-        Hashtable<String,List<String>> ht, String k, String v){
-        if(ht.containsKey(k)){
-            ht.get(k).add(v);
-        }else{
-            List<String> list = new ArrayList<>();
-            list.add(v);
-            ht.put(k, list);
-        }
-    }
 }
